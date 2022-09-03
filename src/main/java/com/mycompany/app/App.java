@@ -1,21 +1,19 @@
 package com.mycompany.app;
 
+import com.sun.net;
 /**
  * Hello world!
  */
 public class App
 {
-
-    private final String message = "Hello World!";
-
     public App() {}
 
     public static void main(String[] args) {
-        System.out.println(new App().getMessage());
-    }
-
-    private final String getMessage() {
-        return message;
+        HttpServer server = HttpServer.create(new InetSocketAddress("localhost", 8001), 0);
+        server.createContext("/test", new  MyHttpHandler());
+        server.setExecutor(threadPoolExecutor);
+        server.start();
+        logger.info(" Server started on port 8001");
     }
 
 }

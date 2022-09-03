@@ -1,0 +1,62 @@
+services:
+  jenkins-docker:
+    networks:
+      - jenkins
+    environment:
+      - DOCKER_TLS_CERTDIR=/certs
+    ports:
+      - 2376:2376
+      - 3000:3000
+    image: docker:dind
+    volumes:
+      - jenkins-docker-certs:/certs/client
+      - jenkins-data:/var/jenkins_home
+    command: --storage-driver=overlay2
+    privileged: true
+    container_name: docker
+  jenkins-blueocean:
+    build: .
+    networks:
+      - jenkins
+    environment:
+      - DOCKER_HOST=tcp://docker:2376
+      - DOCKER_CERT_PATH=/certs/client
+      - DOCKER_TLS_VERIFY=1
+      - JAVA_OPTS="-Dhudson.plugins.git.GitSCM.ALLOW_LOCAL_CHECKOUT=true"
+    ports:
+      - 49000:49000
+      - 50000:50000
+    volumes:
+      - jenkins-data:/var/jenkins_home
+      - jenkins-docker-certs:/certs/client:ro
+      - $HOME:/home
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - 9091:9091
+    links:
+      - "grafana:grafana"
+    volumes:
+      - ./prometheus.yml:/prometheus/prometheus.yml
+    command: --web.listen-address=":9091"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+  grafana:
+    image: grafana/grafana
+    links:
+      - "jenkins-blueocean:jenkins"
+    environment:
+      - GF_SERVER_HTTP_PORT=3031
+    ports:
+      - 3031:3031
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    
+
+networks:
+  jenkins:
+
+volumes:
+  jenkins-docker-certs:
+  jenkins-data:
+    
