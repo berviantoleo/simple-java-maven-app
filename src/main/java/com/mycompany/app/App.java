@@ -14,7 +14,7 @@ public class App
 {
     public App() {}
 
-    private class MyHttpHandler implements HttpHandler {    
+    static class MyHttpHandler implements HttpHandler {    
         @Override    
         public void handle(HttpExchange httpExchange) throws IOException {
             String requestParamValue = null; 
@@ -60,9 +60,8 @@ public class App
     public static void main(String[] args) {
         HttpServer server = HttpServer.create(new InetSocketAddress("localhost", 8001), 0);
         server.createContext("/test", new  MyHttpHandler());
-        server.setExecutor(threadPoolExecutor);
+        server.setExecutor(null);
         server.start();
-        logger.info(" Server started on port 8001");
     }
 
 }
