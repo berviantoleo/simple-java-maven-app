@@ -13,26 +13,16 @@ import com.sun.net.httpserver.HttpServer;
  */
 public class App
 {
+    private final String message = "Hello World!";
+
     public App() {}
 
-    static class MyHttpHandler implements HttpHandler {    
-        @Override
-        public void handle(HttpExchange t) throws IOException {
-            String response = "This is the response";
-            t.sendResponseHeaders(200, response.length());
-            OutputStream os = t.getResponseBody();
-            os.write(response.getBytes());
-            os.close();
-        }
+    public static void main(String[] args) {
+        System.out.println(new App().getMessage());
     }
 
-
-
-    public static void main(String[] args) throws Exception {
-        HttpServer server = HttpServer.create(new InetSocketAddress("localhost", 8001), 0);
-        server.createContext("/test", new  MyHttpHandler());
-        server.setExecutor(null);
-        server.start();
+    private final String getMessage() {
+        return message;
     }
 
 }
