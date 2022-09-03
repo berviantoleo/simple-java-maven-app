@@ -4,5 +4,5 @@ echo 'The following command terminates the "java -jar target/${NAME}-${VERSION}.
 echo '(written to ".pidfile"), all of which were conducted when "deliver.sh"'
 echo 'was executed.'
 set -x
-echo 'not actually kill, because already finished and the app just console hello world'
-# sudo kill $(cat .pidfile)
+# echo 'not actually kill, because already finished and the app just console hello world'
+kill $(cat .pidfile)
