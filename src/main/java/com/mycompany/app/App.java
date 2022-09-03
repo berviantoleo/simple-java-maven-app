@@ -28,7 +28,7 @@ public class App
 
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         HttpServer server = HttpServer.create(new InetSocketAddress("localhost", 8001), 0);
         server.createContext("/test", new  MyHttpHandler());
         server.setExecutor(null);
