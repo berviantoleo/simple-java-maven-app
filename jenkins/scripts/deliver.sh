@@ -26,7 +26,3 @@ set -x
 java -jar target/${NAME}-${VERSION}.jar &
 echo $! > .pidfile
 set +x
-
-# setup wait 1 minute
-echo 'Wait 1 minute to test'
-sleep 60
